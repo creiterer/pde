@@ -58,6 +58,7 @@ return {
 
         -- Code mappings
         { "<leader>c", group = "Code" },
+        { "<leader>cd", function() require("cpp_def").generate_definition() end, desc = "Generate C++ definition" },
 
         -- Diff mappings
         { "<leader>d", group = "Diff" },

@@ -13,6 +13,7 @@ return {
         -- Buffer mappings
         { "<leader>b", group = "Buffer" },
         { "<leader>G", group = "Git" },
+        { "<leader>g", group = "Goto" },
         { "<leader>bl", "<cmd>BufferLineCloseLeft<cr>", desc = "Close all to the left" },
         { "<leader>br", "<cmd>BufferLineCloseRight<cr>", desc = "Close all to the right" },
         { "<leader>bp", "<cmd>BufferLineCyclePrev<cr>", desc = "Previous" },
@@ -71,7 +72,8 @@ return {
         { "<leader>p", "p^", desc = "Paste and jump to line start" },
 
         -- Switch source/header (C++)
-        { "<leader>ss", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header" },
+        { "<leader>gs", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header" },
+        { "<leader>gt", function() require("cpp_test").open_test() end, desc = "Open the corresponding test" },
       })
 
       -- Visual mode diff mappings

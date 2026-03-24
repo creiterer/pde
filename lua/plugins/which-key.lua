@@ -59,6 +59,7 @@ return {
 
         -- Code mappings
         { "<leader>c", group = "Code" },
+        { "<leader>cc", "gcc", desc = "Comment toggle", remap = true },
         { "<leader>cd", function() require("cpp_def").generate_definition() end, desc = "Generate C++ definition" },
 
         -- Diff mappings
@@ -79,6 +80,7 @@ return {
       -- Visual mode diff mappings
       wk.add({
         mode = "v",
+        { "<leader>cc", "gc", desc = "Comment toggle", remap = true },
         { "<leader>d", group = "Diff" },
         { "<leader>dg", ":diffget<cr>", desc = "diffget" },
         { "<leader>dp", ":diffput<cr>", desc = "diffput" },

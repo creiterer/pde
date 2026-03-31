@@ -93,6 +93,14 @@ return {
         -- Paste and jump to line start
         { "<leader>p", "p^", desc = "Paste and jump to line start" },
 
+        -- Yank mappings
+        { "<leader>y", group = "Yank" },
+        { "<leader>yp", function()
+          local path = vim.api.nvim_buf_get_name(0)
+          vim.fn.setreg("+", path)
+          vim.notify("Copied: " .. path)
+        end, desc = "Yank absolute file path" },
+
         -- Switch source/header (C++)
         { "<leader>gs", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header" },
         { "<leader>gt", function() require("cpp_test").open_test() end, desc = "Open the corresponding test" },

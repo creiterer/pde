@@ -65,6 +65,23 @@ return {
         { "<leader>c", group = "Code" },
         { "<leader>cc", "gcc", desc = "Comment toggle", remap = true },
         { "<leader>cd", function() require("cpp_def").generate_definition() end, desc = "Generate C++ definition" },
+        { "<leader>ci", function()
+          local filepath = vim.api.nvim_buf_get_name(0)
+          if not filepath:match("%.[hH]$") and not filepath:match("%.hpp$") and not filepath:match("%.hxx$") then
+            vim.notify("Not a C++ header file", vim.log.levels.ERROR)
+            return
+          end
+          local cpp_path = filepath:gsub("%.h$", ".cpp"):gsub("%.H$", ".cpp"):gsub("%.hpp$", ".cpp"):gsub("%.hxx$", ".cxx")
+          if vim.fn.filereadable(cpp_path) == 1 then
+            vim.notify("File already exists: " .. cpp_path, vim.log.levels.WARN)
+            vim.cmd("edit " .. vim.fn.fnameescape(cpp_path))
+            return
+          end
+          local header = vim.fn.fnamemodify(filepath, ":t")
+          vim.fn.writefile({ '#include "' .. header .. '"' }, cpp_path)
+          vim.cmd("edit " .. vim.fn.fnameescape(cpp_path))
+          vim.notify("Created " .. vim.fn.fnamemodify(cpp_path, ":t"))
+        end, desc = "Create implementation file" },
 
         -- Diff mappings
         { "<leader>d", group = "Diff" },

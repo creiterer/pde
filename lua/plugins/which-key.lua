@@ -82,6 +82,35 @@ return {
           vim.cmd("edit " .. vim.fn.fnameescape(cpp_path))
           vim.notify("Created " .. vim.fn.fnamemodify(cpp_path, ":t"))
         end, desc = "Create implementation file" },
+        { "<leader>cm", function()
+          local default_dir = vim.fn.expand("%:p:h")
+          if default_dir == "" then
+            default_dir = vim.fn.getcwd()
+          end
+          -- Ensure trailing slash
+          if default_dir:sub(-1) ~= "/" then
+            default_dir = default_dir .. "/"
+          end
+          vim.ui.input({ prompt = "Directory: ", default = default_dir, completion = "dir" }, function(dir)
+            if not dir or dir == "" then return end
+            vim.ui.input({ prompt = "Module name: " }, function(name)
+              if not name or name == "" then return end
+              -- Create directory if needed
+              vim.fn.mkdir(dir, "p")
+              local h_path = dir .. "/" .. name .. ".h"
+              local cpp_path = dir .. "/" .. name .. ".cpp"
+              -- Check for existing files
+              if vim.fn.filereadable(h_path) == 1 or vim.fn.filereadable(cpp_path) == 1 then
+                vim.notify("File already exists: " .. name .. ".h or " .. name .. ".cpp", vim.log.levels.WARN)
+                return
+              end
+              vim.fn.writefile({ "#pragma once" }, h_path)
+              vim.fn.writefile({ '#include "' .. name .. '.h"' }, cpp_path)
+              vim.cmd("edit " .. vim.fn.fnameescape(h_path))
+              vim.notify("Created " .. name .. ".h and " .. name .. ".cpp")
+            end)
+          end)
+        end, desc = "Create C++ module (.h + .cpp)" },
 
         -- Diff mappings
         { "<leader>d", group = "Diff" },
